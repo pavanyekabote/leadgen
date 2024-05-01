@@ -41,7 +41,7 @@ def main(event, context):
         "statusCode": 200,
         "body": body,
         "headers": {
-            "Content-Type": "application/html"
+            "Content-Type": "text/html; charset=UTF-8"
         }
     }
 
