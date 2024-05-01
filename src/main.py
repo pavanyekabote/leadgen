@@ -30,7 +30,7 @@ def main(event, context):
     opts.add_argument("--ignore-certificate-errors")
 
     driver = Chrome(executable_path="/opt/chromedriver", options=opts)
-    driver.get("url")
+    driver.get(url_to_fetch)
     body = driver.page_source
 
     driver.close()
