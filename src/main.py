@@ -15,6 +15,7 @@ def main(event, context):
                 "Content-Type": "application/json"
             }
         }
+    print("Request for URL is ", url_to_fetch)
     print("OS PATH LS :: /opt :: ", os.listdir("/opt"))
     opts = Options()
     opts.binary_location = "/opt/headless-chromium"
