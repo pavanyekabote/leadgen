@@ -4,8 +4,8 @@ import os
 import json
 
 def main(event, context):
-
-    query_params = event.get("queryParameters", {}) or {}
+    print("Event is ", event)
+    query_params = event.get("queryStringParameters", {}) or {}
     url_to_fetch = query_params.get("url")
     if not url_to_fetch and url_to_fetch == "":
         return {
