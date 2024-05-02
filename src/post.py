@@ -5,7 +5,7 @@ import json
 
 def method_POST(event, context):
 
-    body = event.get("body", {}) or {}
+    body = json.loads(event.get("body", "{}") or "{}")
     platform = body.get("platform")
     user = body.get("username")
     password = body.get("password")
