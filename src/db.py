@@ -59,7 +59,7 @@ def save_cookies(data):
     db: Database = MongoDb.get_instance().db
     user = data.get("user")
     cookies = data.get("cookies")
-    collection = db[DBCollections]
+    collection = db[DBCollections.USER_COOKIES]
     print(f"Saving cookies of user {user} to db")
     recent_cookie = collection.find_one({"user": user}).sort({"created_date": -1})
     if recent_cookie:
