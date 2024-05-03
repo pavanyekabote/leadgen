@@ -61,7 +61,7 @@ def save_cookies(data):
     cookies = data.get("cookies")
     collection = db[DBCollections.USER_COOKIES]
     print(f"Saving cookies of user {user} to db")
-    recent_cookie = collection.find_one({"user": user}).sort({"created_date": -1})
+    recent_cookie = collection.find_one({"user": user}, sort=[("created_date", -1)])
     if recent_cookie:
         collection.update_one({"user": user, "_id": recent_cookie._id}, { "$set": { "expired": True } })
         print(f"Set recent cookie {recent_cookie._id} to expired.")
@@ -78,4 +78,4 @@ def get_user_cookies(data):
     user = data.get("user")
     db: Database = MongoDb.get_instance().db
     col = db[DBCollections.USER_COOKIES]
-    col.find_one({"user": user}).sort({"created_date": -1})
+    col.find_one({"user": user}, sort=[("created_date", -1)])
