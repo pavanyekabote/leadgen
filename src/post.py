@@ -13,6 +13,8 @@ def method_POST(event, context):
 
     driver = get_chrome_driver()
 
+    driver.get("https://www.linkedin.com/uas/login")
+    time.sleep(2)
     login_linkedin({
         "username": user,
         "password": password,
