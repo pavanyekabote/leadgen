@@ -56,11 +56,11 @@ def save_login_details(data):
     print(f"Login log is saved successfully for user :: {user}")
 
 def save_cookies(data):
-    print(f"Saving cookies of user {user} to db")
     db: Database = MongoDb.get_instance().db
     user = data.get("user")
     cookies = data.get("cookies")
     collection = db[DBCollections]
+    print(f"Saving cookies of user {user} to db")
     recent_cookie = collection.find_one({"user": user}).sort({"created_date": -1})
     if recent_cookie:
         collection.update_one({"user": user, "_id": recent_cookie._id}, { "$set": { "expired": True } })
