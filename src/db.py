@@ -36,7 +36,7 @@ def save_request(data):
         "platform": platform,
         "created_date": datetime.utcnow()
     }
-    id = db.get_collection(DBCollections.USER_LOG).insert_one(payload).inserted_id
+    id = db[DBCollections.USER_LOG].insert_one(payload).inserted_id
     print(f"Saved user {user} request to scrape platform {platform} with keywords {keywords}")
 
 
@@ -48,7 +48,7 @@ def save_login_details(data):
     login_with = data.get('login_with')
     platform = data.get("platform")
     payload = {"user": user, "login_with": login_with, "platform": platform, "created_date": datetime.utcnow()}
-    db.get_collection(DBCollections.USER_LOGIN).insert_one(payload)
+    db[DBCollections.USER_LOGIN].insert_one(payload)
     print(f"Login log is saved successfully for user :: {user}")
 
 def save_cookies(data):
@@ -56,7 +56,7 @@ def save_cookies(data):
     db: Database = MongoDb.db
     user = data.get("user")
     cookies = data.get("cookies")
-    collection = db.get_collection(DBCollections)
+    collection = db[DBCollections]
     recent_cookie = collection.find_one({"user": user}).sort({"created_date": -1})
     if recent_cookie:
         collection.update_one({"user": user, "_id": recent_cookie._id}, { "$set": { "expired": True } })
@@ -73,5 +73,5 @@ def save_cookies(data):
 def get_user_cookies(data):
     user = data.get("user")
     db: Database = MongoDb.db
-    col = db.get_collection(DBCollections.USER_COOKIES)
+    col = db[DBCollections.USER_COOKIES]
     col.find_one({"user": user}).sort({"created_date": -1})
