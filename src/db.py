@@ -10,6 +10,7 @@ class MongoDb:
     def __init__(self) -> None:
         self._connection = MongoClient(DBConfig.URI)
         self._db: Database = self._connection[DBConfig.NAME]
+        print("BD is ", self._db)
 
     @staticmethod 
     def get_instance():
@@ -19,16 +20,19 @@ class MongoDb:
     
     @property
     def db(self) -> Database:
+        print("DB INS ", self._db)
         return self._db
 
 
 
 def save_request(data):
-    db = MongoDb.db
-    print(f"Saving user {user} request to scrape platform {platform} with keywords {keywords}")
+    db = MongoDb.get_instance().db
     keywords = data.get('keywords')
-    user = data.get('user_id')
+    user = data.get('user')
     platform = data.get("platform") 
+
+    print(f"Saving user {user} request to scrape platform {platform} with keywords {keywords}")
+
 
     payload = {
         "keywords": keywords,
@@ -42,7 +46,7 @@ def save_request(data):
 
 def save_login_details(data):
     
-    db: Database = MongoDb.db
+    db: Database = MongoDb.get_instance().db
     user = data.get("user")
     print(f"Saving login log to db for user :: {user}")
     login_with = data.get('login_with')
@@ -53,7 +57,7 @@ def save_login_details(data):
 
 def save_cookies(data):
     print(f"Saving cookies of user {user} to db")
-    db: Database = MongoDb.db
+    db: Database = MongoDb.get_instance().db
     user = data.get("user")
     cookies = data.get("cookies")
     collection = db[DBCollections]
@@ -72,6 +76,6 @@ def save_cookies(data):
 
 def get_user_cookies(data):
     user = data.get("user")
-    db: Database = MongoDb.db
+    db: Database = MongoDb.get_instance().db
     col = db[DBCollections.USER_COOKIES]
     col.find_one({"user": user}).sort({"created_date": -1})
