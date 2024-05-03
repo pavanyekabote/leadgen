@@ -26,7 +26,7 @@ def login_linkedin(data, driver):
     time.sleep(3)
 
     db.save_login_details({"user": usn, "login_with": "username_password", "platform": "linkedin"})
-    save_cookies(usn, driver.get_cookies())
+    save_cookies(usn, driver)
 
 
 def save_cookies(user, driver):
