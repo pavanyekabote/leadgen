@@ -35,14 +35,16 @@ def method_POST(event, context):
     # search_keywords(keywords, driver)
     # driver.execute_script("window.scrollTo(0,document.body.scrollHeight)")
     # time.sleep(5)
-    # page_source = driver.page_source
+    page_source = driver.page_source
     # page_source = ""
+    driver.close()
+    driver.quit()
 
     return {
         "statusCode": 200,
-        "body": json.dumps({"data": posts}),
+        "body": page_source, # json.dumps({"data": page_source}),
         "headers": {
-            "Content-Type": "application/json"
+            "Content-Type": "text/html"
         }
     }
 
