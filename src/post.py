@@ -30,13 +30,18 @@ def method_POST(event, context):
     print("Cokies ", cookies)
     load_cookies(cookies, driver)
     driver.get("https://www.linkedin.com/feed/")
-
+    ll = []
+    page_source = driver.page_source
+    ll.append(page_source)
     posts = search_keywords_with_url(keywords, driver, page=page_number)
+    page_source = driver.page_source
+    ll.append(page_source)
     # search_keywords(keywords, driver)
     # driver.execute_script("window.scrollTo(0,document.body.scrollHeight)")
     # time.sleep(5)
     print("POSTS ", posts)
     page_source = driver.page_source
+    ll.append(page_source)
 
     # page_source = ""
     # print("PAGE SOURCE :: ", page_source)
@@ -45,7 +50,7 @@ def method_POST(event, context):
 
     return {
         "statusCode": 200,
-        "body": page_source, # json.dumps({"data": page_source}),
+        "body": '\n\n\n\n'.join(ll), # json.dumps({"data": page_source}),
         "headers": {
             "Content-Type": "text/html"
         }
