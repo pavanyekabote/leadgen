@@ -8,6 +8,8 @@ import json
 import re
 from urllib.parse import quote
 import db
+from bs4 import BeautifulSoup
+
 
 def login_linkedin(data, driver):
     print("Initializing login with usn and pwd")
@@ -61,7 +63,50 @@ def search_keywords(keywords, driver: webdriver.Chrome):
     search_input = find_element(driver, By.CSS_SELECTOR, "#global-nav #global-nav-typeahead input.search-global-typeahead__input")
     search_input.send_keys(keywords)
     search_input.send_keys(Keys.ENTER)
-    time.sleep(10)
+    time.sleep(5)
+
+def get_user_data_from_url(user_payload, driver):
+    url = user_payload.get('posted_by_user_url')
+    if url is None:
+        return user_payload
+
+    user_payload['post_by_user_followers'] = ''
+    user_payload['post_by_user_connections'] = ''
+
+    print("Fetching profile of user ", user_payload.get('posted_by_user'), " ...")
+
+    driver.get(url)
+    time.sleep(6)
+
+    user_location_element = find_element(driver, By.CSS_SELECTOR, "ul.pv-text-details__right-panel + div > .text-body-small ")
+    followers_element = find_elements(driver, By.CSS_SELECTOR, '.live-video-hero-image + div > ul > li')
+
+    user_payload['posted_by_user_location'] = user_location_element.text
+    if followers_element and len(followers_element) > 1:
+        user_payload['post_by_user_followers'] = followers_element[0].text
+        user_payload['post_by_user_connections'] = re.sub(r'[a-zA-Z ]', '', followers_element[1].text or '')
+
+    return user_payload
+
+def search_keywords_with_url(keywords, driver: webdriver.Chrome, page=1):
+    encoded_keywords = quote(keywords, safe='/')
+    url = f"https://www.linkedin.com/search/results/content/?keywords={encoded_keywords}&origin=SWITCH_SEARCH_VERTICAL&sid=hDr&page={page}"
+    driver.get(url)
+    print("Searching for keywords with url....")
+    time.sleep(8)
+    posts = get_list_of_posts_from_url(driver)
+    final_posts = [get_user_data_from_url(post, driver) for post in posts]
+    return final_posts
+
+def get_list_of_posts_from_url(driver):
+    print("Getting list of posts from url ...")
+    html = driver.page_source
+    soup = BeautifulSoup(html, "html.parser")
+    li_list = soup.css.select("main .reusable-search__entity-result-list > li")
+    processed_posts = list(filter(lambda post: post.get("posted_by_user") and post.get("posted_by_user_url"), li_list[:]))
+    print("Total posts found from url :: ", len(processed_posts))
+    return processed_posts
+
 
 class ReplacerObject:
     def __init__(self, **kwargs):
