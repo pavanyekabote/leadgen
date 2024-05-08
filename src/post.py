@@ -19,18 +19,19 @@ def method_POST(event, context):
 
     driver.get("https://www.linkedin.com/uas/login")
     time.sleep(2)
-    # login_linkedin({
-    #     "username": user,
-    #     "password": password,
-    #     "keywords": keywords,
-    #     "platform": platform
-    # }, driver)
+    login_linkedin({
+        "username": user,
+        "password": password,
+        "keywords": keywords,
+        "platform": platform
+    }, driver)
+    ll = []
 
+    ll.append(driver.page_source)
     cookies = (get_user_cookies({"user": user}) or {}).get("cookies", [])
     print("Cokies ", cookies)
     load_cookies(cookies, driver)
     driver.get("https://www.linkedin.com/feed/")
-    ll = []
     page_source = driver.page_source
     ll.append(page_source)
     posts = search_keywords_with_url(keywords, driver, page=page_number)
@@ -50,7 +51,7 @@ def method_POST(event, context):
 
     return {
         "statusCode": 200,
-        "body": '\n\n\n\n'.join(ll), # json.dumps({"data": page_source}),
+        "body": '<!-- HERE IS NEW HTML -->'.join(ll), # json.dumps({"data": page_source}),
         "headers": {
             "Content-Type": "text/html"
         }
