@@ -26,12 +26,10 @@ def method_POST(event, context):
     #     "platform": platform
     # }, driver)
 
-    n_pages = 10
-    n_items_per_page = 10
-    cookies = (get_user_cookies({"user": "yekabotep@gmail.com"}) or {}).get("cookies", [])
+    cookies = (get_user_cookies({"user": user}) or {}).get("cookies", [])
     print("Cokies ", cookies)
     load_cookies(cookies, driver)
-    driver.get("https://www.linkedin.com/feed")
+    driver.get("https://www.linkedin.com/feed/")
 
     posts = search_keywords_with_url(keywords, driver, page=page_number)
     # search_keywords(keywords, driver)
@@ -39,8 +37,9 @@ def method_POST(event, context):
     # time.sleep(5)
     print("POSTS ", posts)
     page_source = driver.page_source
+
     # page_source = ""
-    print("PAGE SOURCE :: ", page_source)
+    # print("PAGE SOURCE :: ", page_source)
     driver.close()
     driver.quit()
 
