@@ -63,8 +63,8 @@ def save_cookies(data):
     print(f"Saving cookies of user {user} to db")
     recent_cookie = collection.find_one({"user": user}, sort=[("created_date", -1)])
     if recent_cookie:
-        collection.update_one({"user": user, "_id": recent_cookie._id}, { "$set": { "expired": True } })
-        print(f"Set recent cookie {recent_cookie._id} to expired.")
+        collection.update_one({"user": user, "_id": recent_cookie.get("_id")}, { "$set": { "expired": True } })
+        print(f"Set recent cookie {recent_cookie.get('_id', '')} to expired.")
     payload = {
         "user": user,
         "cookies": cookies,
