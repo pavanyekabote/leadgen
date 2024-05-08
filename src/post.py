@@ -31,6 +31,7 @@ def method_POST(event, context):
     cookies = (get_user_cookies({"user": "yekabotep@gmail.com"}) or {}).get("cookies", [])
     print("Cokies ", cookies)
     load_cookies(cookies, driver)
+    driver.get("https://www.linkedin.com/feed")
 
     posts = search_keywords_with_url(keywords, driver, page=page_number)
     # search_keywords(keywords, driver)

@@ -93,7 +93,7 @@ def search_keywords_with_url(keywords, driver: webdriver.Chrome, page=1):
     url = f"https://www.linkedin.com/search/results/content/?keywords={encoded_keywords}&origin=SWITCH_SEARCH_VERTICAL&sid=hDr&page={page}"
     driver.get(url)
     print("Searching for keywords with url....")
-    time.sleep(8)
+    time.sleep(5)
     posts = get_list_of_posts_from_url(driver)
     final_posts = [get_user_data_from_url(post, driver) for post in posts]
     return final_posts
