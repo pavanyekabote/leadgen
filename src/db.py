@@ -78,4 +78,4 @@ def get_user_cookies(data):
     user = data.get("user")
     db: Database = MongoDb.get_instance().db
     col = db[DBCollections.USER_COOKIES]
-    col.find_one({"user": user}, sort=[("created_date", -1)])
+    return col.find_one({"user": user}, sort=[("created_date", -1)])
